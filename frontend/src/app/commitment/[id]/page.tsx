@@ -1,75 +1,78 @@
-import Link from "next/link";
-import { mockCommitment } from "@/lib/mock-data";
+import Link from 'next/link';
+import { mockCommitment } from '@/lib/mock-data';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function CommitmentDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const commitment = { ...mockCommitment, id };
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-      <div className="mb-8 flex items-center justify-between gap-4">
+    <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-10">
+      <div className="mb-10 flex items-center justify-between border-b border-neutral-900 pb-6">
         <div>
-          <p className="text-sm text-neutral-400">Commitment #{commitment.id}</p>
-          <h1 className="text-4xl font-semibold text-white">{commitment.description}</h1>
+          <p className="text-sm text-neutral-500">Commitment #{commitment.id}</p>
+          <h1 className="mt-2 text-4xl font-semibold text-white">{commitment.description}</h1>
         </div>
-        <Link href="/create" className="rounded-xl border border-white/15 px-4 py-2 text-sm text-white hover:bg-white/5">
-          New commitment
+        <Link href="/create">
+          <Button variant="outline">New commitment</Button>
         </Link>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="flex items-center justify-between">
-            <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-sm text-emerald-300">
-              {commitment.status}
-            </span>
-            <span className="text-sm text-neutral-400">Public page</span>
-          </div>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Public commitment</CardTitle>
+                <CardDescription>Track the stake, deadline, beneficiary, and proof.</CardDescription>
+              </div>
+              <Badge variant="success">{commitment.status}</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <InfoRow label="Creator" value={commitment.creator} />
+            <InfoRow label="Beneficiary" value={commitment.beneficiary} />
+            <InfoRow label="Amount" value={commitment.amount} />
+            <InfoRow label="Deadline" value="Apr 20, 2026 · 18:00 UTC" />
+            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 text-sm text-neutral-300">
+              If the creator does not complete the goal before the deadline, the beneficiary can claim the deposit after expiry.
+            </div>
+            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5">
+              <p className="text-sm text-neutral-500">Proof</p>
+              <a href={commitment.proof} className="mt-2 block text-sm text-white underline" target="_blank" rel="noreferrer">
+                {commitment.proof}
+              </a>
+            </div>
+          </CardContent>
+        </Card>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <InfoCard label="Creator" value={commitment.creator} />
-            <InfoCard label="Beneficiary" value={commitment.beneficiary} />
-            <InfoCard label="Amount" value={commitment.amount} />
-            <InfoCard label="Deadline" value="Apr 20, 2026, 18:00 UTC" />
-          </div>
-
-          <div className="rounded-2xl border border-violet-500/30 bg-violet-500/5 p-5">
-            <p className="text-sm text-violet-200">If the creator completes the goal before the deadline, they can reclaim the deposit. Otherwise, the beneficiary claims the penalty after expiry.</p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-            <p className="text-sm text-neutral-400">Proof of completion</p>
-            <a href={commitment.proof} className="mt-2 block text-white underline" target="_blank" rel="noreferrer">
-              {commitment.proof}
-            </a>
-          </div>
-        </section>
-
-        <aside className="space-y-4 rounded-3xl border border-white/10 bg-black/30 p-6">
-          <div className="rounded-2xl border border-white/10 p-4">
-            <p className="text-sm text-neutral-400">Countdown</p>
-            <p className="mt-2 text-3xl font-semibold text-white">23h 14m</p>
-          </div>
-          <button className="w-full rounded-2xl bg-violet-600 px-4 py-3 font-medium text-white hover:bg-violet-500">
-            Submit proof and mark complete
-          </button>
-          <button className="w-full rounded-2xl border border-white/15 px-4 py-3 font-medium text-white hover:bg-white/5">
-            Claim refund
-          </button>
-          <button className="w-full rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 font-medium text-rose-200 hover:bg-rose-500/20">
-            Claim penalty
-          </button>
-        </aside>
+        <Card>
+          <CardHeader>
+            <CardTitle>Actions</CardTitle>
+            <CardDescription>Available actions depend on role and current state.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="rounded-2xl border border-neutral-800 px-4 py-5">
+              <p className="text-sm text-neutral-500">Countdown</p>
+              <p className="mt-2 text-3xl font-semibold text-white">23h 14m</p>
+            </div>
+            <Button className="w-full">Submit proof and mark complete</Button>
+            <Button className="w-full" variant="outline">Claim refund</Button>
+            <Button className="w-full" variant="danger">Claim penalty</Button>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
 }
 
-function InfoCard({ label, value }: { label: string; value: string }) {
+function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-      <p className="text-sm text-neutral-400">{label}</p>
-      <p className="mt-2 text-white">{value}</p>
+    <div className="flex items-center justify-between rounded-xl border border-neutral-800 px-4 py-3 text-sm">
+      <span className="text-neutral-500">{label}</span>
+      <span className="text-white">{value}</span>
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { parseEther } from 'viem';
 import { useWriteContract } from 'wagmi';
+import { Button } from '@/components/ui/button';
 import { trustDropAbi, trustDropAddress } from '@/lib/contract';
 
 export function CreateCommitmentAction({
@@ -33,7 +34,7 @@ export function CreateCommitmentAction({
         args: [description, BigInt(Math.floor(new Date(deadline).getTime() / 1000)), beneficiary as `0x${string}`],
         value: parseEther(amount || '0'),
       });
-      setFeedback(`Transaction submitted: ${tx}`);
+      setFeedback(`Transaction submitted: ${tx.slice(0, 10)}...`);
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : 'Failed to create commitment');
     }
@@ -41,15 +42,10 @@ export function CreateCommitmentAction({
 
   return (
     <div className="space-y-3">
-      <button
-        type="button"
-        onClick={handleCreate}
-        disabled={isPending}
-        className="rounded-2xl bg-violet-600 px-5 py-3 font-medium text-white transition hover:bg-violet-500 disabled:opacity-60"
-      >
-        {isPending ? 'Submitting...' : 'Create commitment on Monad'}
-      </button>
-      {feedback ? <p className="text-sm text-neutral-300">{feedback}</p> : null}
+      <Button type="button" onClick={handleCreate} disabled={isPending} size="lg" className="w-full">
+        {isPending ? 'Submitting...' : 'Create commitment'}
+      </Button>
+      {feedback ? <p className="text-sm text-neutral-400">{feedback}</p> : null}
     </div>
   );
 }
