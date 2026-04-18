@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WalletConnectButton } from "@/components/wallet/connect-button";
 
 const features = [
   "Create a public commitment with a deposit in MON",
@@ -24,7 +25,8 @@ export default function Home() {
               and make the consequence public. If you complete it, you get your money back.
             </p>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <WalletConnectButton />
             <Link
               href="/create"
               className="rounded-xl bg-violet-600 px-5 py-3 font-medium text-white transition hover:bg-violet-500"

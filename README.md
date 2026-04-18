@@ -32,3 +32,15 @@ forge test
 2. Publish a public commitment page
 3. Submit proof and mark it complete
 4. Claim refund or let beneficiary claim penalty after expiry
+
+## Environment variables
+
+### Frontend
+Copy `frontend/.env.example` to `frontend/.env.local` and fill:
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
+- `NEXT_PUBLIC_TRUSTDROP_ADDRESS`
+
+### Contracts
+Copy `contracts/.env.example` to `contracts/.env` and fill:
+- `MONAD_RPC_URL`
+- `PRIVATE_KEY`

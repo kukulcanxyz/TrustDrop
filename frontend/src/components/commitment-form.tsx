@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
+import { CreateCommitmentAction } from '@/components/commitment-actions';
 
 export function CommitmentForm() {
-  const [description, setDescription] = useState("Ship Monad Blitz demo before 6 PM");
-  const [amount, setAmount] = useState("0.10");
-  const [deadline, setDeadline] = useState("2026-04-20T18:00");
-  const [beneficiary, setBeneficiary] = useState("0x000000000000000000000000000000000000dEaD");
-  const [proofHint, setProofHint] = useState("Add your deploy link or GitHub repo before deadline");
+  const [description, setDescription] = useState('Ship Monad Blitz demo before 6 PM');
+  const [amount, setAmount] = useState('0.10');
+  const [deadline, setDeadline] = useState('2026-04-20T18:00');
+  const [beneficiary, setBeneficiary] = useState('0x000000000000000000000000000000000000dEaD');
+  const [proofHint, setProofHint] = useState('Add your deploy link or GitHub repo before deadline');
 
   const summary = useMemo(
     () => [
       `${amount} MON locked`,
       `Beneficiary: ${beneficiary.slice(0, 6)}...${beneficiary.slice(-4)}`,
-      `Deadline: ${deadline || "Unset"}`,
+      `Deadline: ${deadline || 'Unset'}`,
     ],
     [amount, beneficiary, deadline],
   );
@@ -64,12 +65,12 @@ export function CommitmentForm() {
             className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none"
           />
         </div>
-        <button
-          type="button"
-          className="rounded-2xl bg-violet-600 px-5 py-3 font-medium text-white transition hover:bg-violet-500"
-        >
-          Connect wallet and create commitment
-        </button>
+        <CreateCommitmentAction
+          description={description}
+          amount={amount}
+          deadline={deadline}
+          beneficiary={beneficiary}
+        />
       </form>
 
       <aside className="rounded-3xl border border-white/10 bg-black/30 p-6">
